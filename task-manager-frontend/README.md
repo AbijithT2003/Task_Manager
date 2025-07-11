@@ -1,12 +1,91 @@
-# React + Vite
+## 📋 Task Manager Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the **frontend** of the Task Manager application built with **React** and **Vite**. It provides a modern Kanban-style interface to manage tasks, projects, and team members.
 
-Currently, two official plugins are available:
+### 🧰 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+* ⚛️ React
+* ⚡ Vite
+* 🎨 CSS
+* 📦 Axios (for API requests)
+* 🎯 Lucide React (for icons)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 🚀 Getting Started
+
+#### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/task-manager-frontend.git
+cd task-manager-frontend
+```
+
+#### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+#### 3. Start the Development Server
+
+```bash
+npm run dev
+```
+
+The app will be available at [http://localhost:5173](http://localhost:5173)
+
+---
+
+### 📁 Project Structure
+
+```
+src/
+├── assets/               # Static assets
+├── components/           # UI components
+│   ├── Header/
+│   ├── KanbanBoard/
+│   ├── TaskCard/
+│   └── TaskModal/
+├── services/             # API service calls
+├── App.jsx               # Main App component
+├── index.css             # Global styles
+└── main.jsx              # Entry point
+```
+
+---
+
+### 📝 Features
+
+* View tasks in Kanban-style columns.
+* Filter and search tasks.
+* Create, update, and delete tasks.
+* Assign members and manage projects.
+* Modal-based task editing interface.
+
+---
+
+### ⚙️ Environment Variables
+
+> *You will need to set up environment variables to connect with the backend once it's ready.*
+
+Create a `.env` file:
+
+```
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+---
+
+### ❌ .gitignore
+
+Make sure the following folders/files are ignored in Git:
+
+```
+node_modules/
+dist/
+.env
+```
+
+---
+
