@@ -1,21 +1,18 @@
-// frontend/src/components/Header.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, Grid, List, Plus, ChevronDown } from 'lucide-react';
 import './Header.css';
 
 const Header = ({
-  projects,
-  currentProject,
-  onProjectChange,
   searchTerm,
   onSearchChange,
   filterStatus,
   onFilterChange,
   viewMode,
   onViewModeChange,
-  members,
-  onAddMember
+  onAddTask
 }) => {
+  const [showAddDropdown, setShowAddDropdown] = useState(false);
+
   const filterOptions = [
     { value: 'all', label: 'All tasks' },
     { value: 'todo', label: 'To Do' },
@@ -26,31 +23,12 @@ const Header = ({
   return (
     <header className="header">
       <div className="header-left">
-        {/* Project Dropdown */}
-        <div className="project-dropdown">
-          <select
-            value={currentProject?.id || ''}
-            onChange={(e) => {
-              const project = projects.find(p => p.id === parseInt(e.target.value));
-              onProjectChange(project);
-            }}
-            className="project-select"
-          >
-            {projects.map(project => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="dropdown-icon" size={16} />
-        </div>
-
         {/* Search Bar */}
         <div className="search-container">
           <Search className="search-icon" size={16} />
           <input
             type="text"
-            placeholder="Search here"
+            placeholder="Search tasks"
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
             className="search-input"
@@ -59,7 +37,7 @@ const Header = ({
       </div>
 
       <div className="header-right">
-        {/* View Mode Toggle */}
+        {/* View Toggle */}
         <div className="view-toggle">
           <button
             className={`view-btn ${viewMode === 'kanban' ? 'active' : ''}`}
@@ -91,25 +69,22 @@ const Header = ({
           <ChevronDown className="dropdown-icon" size={16} />
         </div>
 
-        {/* Add Member Button */}
-        <button className="add-member-btn" onClick={onAddMember}>
-          <Plus size={16} />
-          Add member
-        </button>
-
-        {/* Member Avatars */}
-        <div className="member-avatars">
-          {members.slice(0, 5).map((member, index) => (
-            <div key={member.id} className="member-avatar" style={{ zIndex: 5 - index }}>
-              <img
-                src={member.avatar || `https://ui-avatars.com/api/?name=${member.name}&background=random`}
-                alt={member.name}
-                title={member.name}
-              />
+        {/* Add Task Button */}
+        <div className="add-dropdown">
+          <button 
+            className="add-btn" 
+            onClick={() => setShowAddDropdown(!showAddDropdown)}
+          >
+            <Plus size={16} />
+            <span>Add</span>
+            <ChevronDown size={14} />
+          </button>
+          {showAddDropdown && (
+            <div className="add-dropdown-menu">
+              <button onClick={() => { onAddTask(); setShowAddDropdown(false); }}>
+                Add Task
+              </button>
             </div>
-          ))}
-          {members.length > 5 && (
-            <div className="member-count">+{members.length - 5}</div>
           )}
         </div>
       </div>

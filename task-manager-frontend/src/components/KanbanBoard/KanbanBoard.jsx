@@ -6,32 +6,10 @@ import './KanbanBoard.css';
 
 const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, members }) => {
   const columns = [
-    {
-      id: 'design',
-      title: 'Design',
-      status: 'design',
-      color: 'purple'
-    },
-    {
-      id: 'frontend',
-      title: 'Front-End',
-      status: 'frontend',
-      color: 'blue'
-    },
-    {
-      id: 'backend',
-      title: 'Back-End',
-      status: 'backend',
-      color: 'yellow'
-    },
-    {
-      id: 'testing',
-      title: 'Testing',
-      status: 'testing',
-      color: 'red'
-    }
-  ];
-
+  { id: 'todo', title: 'To Do', status: 'TODO', color: 'purple' },
+  { id: 'in_progress', title: 'In Progress', status: 'IN_PROGRESS', color: 'blue' },
+  { id: 'completed', title: 'Completed', status: 'COMPLETED', color: 'green' }
+];
   const getTasksForColumn = (status) => {
     return tasks.filter(task => task.status === status);
   };
@@ -103,6 +81,6 @@ const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, members }) 
       })}
     </div>
   );
-};
+}
 
 export default KanbanBoard;

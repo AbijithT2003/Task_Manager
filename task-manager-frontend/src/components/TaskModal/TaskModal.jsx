@@ -1,15 +1,14 @@
 // frontend/src/components/TaskModal.js
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, User, Flag, MessageCircle, Paperclip, Trash2 } from 'lucide-react';
+import { X, Calendar, Flag, MessageCircle, Paperclip, Trash2 } from 'lucide-react';
 import './TaskModal.css';
 
-const TaskModal = ({ task, members, onSave, onDelete, onClose }) => {
+const TaskModal = ({ task, onSave, onDelete, onClose }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    status: 'design',
-    priority: 'medium',
-    assigneeId: '',
+    status: 'TODO',
+    priority: 'MEDIUM',
     dueDate: '',
     tags: []
   });
@@ -19,9 +18,8 @@ const TaskModal = ({ task, members, onSave, onDelete, onClose }) => {
       setFormData({
         title: task.title || '',
         description: task.description || '',
-        status: task.status || 'design',
-        priority: task.priority || 'medium',
-        assigneeId: task.assigneeId || '',
+        status: task.status || 'TODO',
+        priority: task.priority || 'MEDIUM',
         dueDate: task.dueDate ? new Date(task.dueDate).toISOString().slice(0, 16) : '',
         tags: task.tags || []
       });
@@ -30,13 +28,10 @@ const TaskModal = ({ task, members, onSave, onDelete, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     const taskData = {
       ...formData,
-      dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
-      assigneeId: formData.assigneeId ? parseInt(formData.assigneeId) : null
+      dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null
     };
-
     onSave(taskData);
   };
 
@@ -48,16 +43,15 @@ const TaskModal = ({ task, members, onSave, onDelete, onClose }) => {
   };
 
   const statusOptions = [
-    { value: 'design', label: 'Design' },
-    { value: 'frontend', label: 'Front-End' },
-    { value: 'backend', label: 'Back-End' },
-    { value: 'testing', label: 'Testing' }
+    { value: 'TODO', label: 'To Do' },
+    { value: 'IN_PROGRESS', label: 'In Progress' },
+    { value: 'COMPLETED', label: 'Completed' }
   ];
 
   const priorityOptions = [
-    { value: 'low', label: 'Low' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'high', label: 'High' }
+    { value: 'LOW', label: 'Low' },
+    { value: 'MEDIUM', label: 'Medium' },
+    { value: 'HIGH', label: 'High' }
   ];
 
   return (
@@ -96,7 +90,7 @@ const TaskModal = ({ task, members, onSave, onDelete, onClose }) => {
             />
           </div>
 
-          {/* Status and Priority Row */}
+          {/* Status and Priority */}
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="status">Status</label>
@@ -129,36 +123,18 @@ const TaskModal = ({ task, members, onSave, onDelete, onClose }) => {
             </div>
           </div>
 
-          {/* Assignee and Due Date Row */}
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="assignee">Assignee</label>
-              <select
-                id="assignee"
-                value={formData.assigneeId}
-                onChange={(e) => handleChange('assigneeId', e.target.value)}
-              >
-                <option value="">Select assignee</option>
-                {members.map(member => (
-                  <option key={member.id} value={member.id}>
-                    {member.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="dueDate">Due Date</label>
-              <input
-                type="datetime-local"
-                id="dueDate"
-                value={formData.dueDate}
-                onChange={(e) => handleChange('dueDate', e.target.value)}
-              />
-            </div>
+          {/* Due Date */}
+          <div className="form-group">
+            <label htmlFor="dueDate">Due Date</label>
+            <input
+              type="datetime-local"
+              id="dueDate"
+              value={formData.dueDate}
+              onChange={(e) => handleChange('dueDate', e.target.value)}
+            />
           </div>
 
-          {/* Task Stats (for editing existing tasks) */}
+          {/* Task Stats */}
           {task && (
             <div className="task-stats-section">
               <h3>Task Information</h3>
@@ -179,7 +155,7 @@ const TaskModal = ({ task, members, onSave, onDelete, onClose }) => {
             </div>
           )}
 
-          {/* Form Actions */}
+          {/* Actions */}
           <div className="form-actions">
             <div className="action-left">
               {task && onDelete && (

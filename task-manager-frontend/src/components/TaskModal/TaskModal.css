@@ -99,6 +99,7 @@
 .form-row {
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
 }
 
 /* Task Stats Section */

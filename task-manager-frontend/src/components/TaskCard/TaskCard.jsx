@@ -3,7 +3,7 @@ import React from 'react';
 import { MessageCircle, Paperclip, CheckSquare, Clock } from 'lucide-react';
 import './TaskCard.css';
 
-const TaskCard = ({ task, members, onClick, onDragStart }) => {
+const TaskCard = ({ task, onClick, onDragStart }) => {
   const getPriorityColor = (priority) => {
     switch (priority?.toLowerCase()) {
       case 'high': return 'red';
@@ -11,10 +11,6 @@ const TaskCard = ({ task, members, onClick, onDragStart }) => {
       case 'low': return 'green';
       default: return 'gray';
     }
-  };
-
-  const getAssignedMember = (assigneeId) => {
-    return members.find(member => member.id === assigneeId);
   };
 
   const formatDueDate = (dueDate) => {
@@ -36,7 +32,6 @@ const TaskCard = ({ task, members, onClick, onDragStart }) => {
     }
   };
 
-  const assignedMember = getAssignedMember(task.assigneeId);
   const dueDateInfo = formatDueDate(task.dueDate);
 
   return (
@@ -99,17 +94,6 @@ const TaskCard = ({ task, members, onClick, onDragStart }) => {
             </div>
           )}
         </div>
-
-        {/* Assigned Member */}
-        {assignedMember && (
-          <div className="task-assignee">
-            <img
-              src={assignedMember.avatar || `https://ui-avatars.com/api/?name=${assignedMember.name}&background=random`}
-              alt={assignedMember.name}
-              title={assignedMember.name}
-            />
-          </div>
-        )}
       </div>
     </div>
   );
