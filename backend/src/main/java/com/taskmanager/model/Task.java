@@ -28,6 +28,11 @@ public class Task {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TaskStatus status;

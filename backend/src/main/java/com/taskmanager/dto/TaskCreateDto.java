@@ -20,6 +20,9 @@ public class TaskCreateDto {
     private String title;
     
     private String description;
+
+    private Long categoryId;
+    @NotNull(message = "Category is required")
     
     @NotNull(message = "Status is required")
     private TaskStatus status;
