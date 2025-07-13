@@ -24,7 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @Tag(name = "Task Management", description = "APIs for managing tasks")
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+
 public class TaskController {
 
     private final TaskService taskService;
