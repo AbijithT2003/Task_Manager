@@ -2,7 +2,6 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 class TaskService {
-  // Generic HTTP request handler
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
     const config = {
@@ -15,11 +14,11 @@ class TaskService {
 
     try {
       const response = await fetch(url, config);
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      
+
       const data = await response.json();
       return { data, status: response.status };
     } catch (error) {
@@ -28,7 +27,7 @@ class TaskService {
     }
   }
 
-  // Project endpoints
+  // Project Endpoints
   async getProjects() {
     return this.request('/projects');
   }
@@ -57,7 +56,7 @@ class TaskService {
     });
   }
 
-  // Task endpoints
+  // Task Endpoints
   async getTasks(projectId) {
     return this.request(`/projects/${projectId}/tasks`);
   }
@@ -86,7 +85,6 @@ class TaskService {
     });
   }
 
-  // Task status update
   async updateTaskStatus(id, status) {
     return this.request(`/tasks/${id}/status`, {
       method: 'PATCH',
@@ -94,109 +92,7 @@ class TaskService {
     });
   }
 
-  // Member endpoints
-  async getMembers() {
-    return this.request('/members');
-  }
-
-  async getMember(id) {
-    return this.request(`/members/${id}`);
-  }
-
-  async createMember(memberData) {
-    return this.request('/members', {
-      method: 'POST',
-      body: JSON.stringify(memberData),
-    });
-  }
-
-  async updateMember(id, memberData) {
-    return this.request(`/members/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(memberData),
-    });
-  }
-
-  async deleteMember(id) {
-    return this.request(`/members/${id}`, {
-      method: 'DELETE',
-    });
-  }
-
-  // Project member assignments
-  async getProjectMembers(projectId) {
-    return this.request(`/projects/${projectId}/members`);
-  }
-
-  async addProjectMember(projectId, memberId) {
-    return this.request(`/projects/${projectId}/members`, {
-      method: 'POST',
-      body: JSON.stringify({ memberId }),
-    });
-  }
-
-  async removeProjectMember(projectId, memberId) {
-    return this.request(`/projects/${projectId}/members/${memberId}`, {
-      method: 'DELETE',
-    });
-  }
-
-  // Comment endpoints
-  async getTaskComments(taskId) {
-    return this.request(`/tasks/${taskId}/comments`);
-  }
-
-  async createTaskComment(taskId, commentData) {
-    return this.request(`/tasks/${taskId}/comments`, {
-      method: 'POST',
-      body: JSON.stringify(commentData),
-    });
-  }
-
-  async updateTaskComment(commentId, commentData) {
-    return this.request(`/comments/${commentId}`, {
-      method: 'PUT',
-      body: JSON.stringify(commentData),
-    });
-  }
-
-  async deleteTaskComment(commentId) {
-    return this.request(`/comments/${commentId}`, {
-      method: 'DELETE',
-    });
-  }
-
-  // Attachment endpoints
-  async getTaskAttachments(taskId) {
-    return this.request(`/tasks/${taskId}/attachments`);
-  }
-
-  async uploadTaskAttachment(taskId, fileData) {
-    const formData = new FormData();
-    formData.append('file', fileData);
-    
-    return this.request(`/tasks/${taskId}/attachments`, {
-      method: 'POST',
-      body: formData,
-      headers: {}, // Let browser set Content-Type for FormData
-    });
-  }
-
-  async deleteTaskAttachment(attachmentId) {
-    return this.request(`/attachments/${attachmentId}`, {
-      method: 'DELETE',
-    });
-  }
-
-  // Search endpoints
-  async searchTasks(query, projectId = null) {
-    const params = new URLSearchParams({ q: query });
-    if (projectId) params.append('projectId', projectId);
-    
-    return this.request(`/search/tasks?${params}`);
-  }
-
-  // Dashboard/Statistics endpoints
+  // Optional: Dashboard/Stats
   async getDashboardStats(projectId = null) {
     const params = projectId ? `?projectId=${projectId}` : '';
     return this.request(`/dashboard/stats${params}`);
@@ -213,6 +109,13 @@ class TaskService {
   async getOverdueTasks(projectId = null) {
     const params = projectId ? `?projectId=${projectId}` : '';
     return this.request(`/tasks/overdue${params}`);
+  }
+
+  // Optional: Search
+  async searchTasks(query, projectId = null) {
+    const params = new URLSearchParams({ q: query });
+    if (projectId) params.append('projectId', projectId);
+    return this.request(`/search/tasks?${params}`);
   }
 }
 

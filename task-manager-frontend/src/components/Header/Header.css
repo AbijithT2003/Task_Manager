@@ -1,4 +1,4 @@
-/* frontend/src/components/Header.css */
+/* Header Styles */
 
 .header {
   display: flex;
@@ -26,45 +26,7 @@
   gap: 16px;
 }
 
-/* Project Dropdown */
-.project-dropdown {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.project-select {
-  appearance: none;
-  padding: 8px 32px 8px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1f2937;
-  background-color: white;
-  cursor: pointer;
-  min-width: 200px;
-  transition: all 0.2s ease;
-}
-
-.project-select:hover {
-  border-color: #3b82f6;
-}
-
-.project-select:focus {
-  outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.dropdown-icon {
-  position: absolute;
-  right: 12px;
-  color: #6b7280;
-  pointer-events: none;
-}
-
-/* Search Container */
+/* Search */
 .search-container {
   position: relative;
   display: flex;
@@ -132,7 +94,7 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
-/* Filter Dropdown */
+/* Filter */
 .filter-dropdown {
   position: relative;
   display: flex;
@@ -162,8 +124,14 @@
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-/* Add Member Button */
-.add-member-btn {
+/* Add Button */
+.add-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.add-btn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -178,78 +146,56 @@
   transition: all 0.2s ease;
 }
 
-.add-member-btn:hover {
+.add-btn:hover {
   border-color: #3b82f6;
   color: #3b82f6;
   transform: translateY(-1px);
 }
 
-/* Member Avatars */
-.member-avatars {
-  display: flex;
-  align-items: center;
-  margin-left: 8px;
-}
-
-.member-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  border: 2px solid white;
-  margin-left: -8px;
+.add-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background-color: white;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  z-index: 1000;
+  min-width: 140px;
 }
 
-.member-avatar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.member-avatar img {
+.add-dropdown-menu button {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.member-count {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background-color: #e2e8f0;
-  color: #64748b;
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: 600;
-  margin-left: -8px;
-  border: 2px solid white;
+  padding: 12px 16px;
+  border: none;
+  background: none;
+  color: #374151;
+  font-size: 14px;
+  text-align: left;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
-.member-count:hover {
-  background-color: #cbd5e1;
-  transform: translateY(-2px);
+.add-dropdown-menu button:hover {
+  background-color: #f9fafb;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 1024px) {
   .header {
     padding: 12px 16px;
   }
-  
+
   .header-left {
     gap: 16px;
   }
-  
+
   .header-right {
     gap: 12px;
   }
-  
+
   .search-container {
     max-width: 300px;
   }
@@ -261,62 +207,45 @@
     gap: 16px;
     padding: 16px;
   }
-  
+
   .header-left,
   .header-right {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .search-container {
-    max-width: none;
     order: 3;
     width: 100%;
   }
-  
-  .project-dropdown {
-    min-width: auto;
-  }
-  
-  .project-select {
-    min-width: 150px;
-  }
-  
-  .add-member-btn span {
+
+  .add-btn span {
     display: none;
   }
 }
 
 @media (max-width: 480px) {
+  .header {
+    padding: 12px;
+  }
+
   .header-right {
     flex-wrap: wrap;
     gap: 8px;
   }
-  
-  .view-toggle {
-    order: 1;
+
+  .view-toggle,
+  .filter-dropdown,
+  .add-dropdown {
+    order: unset;
   }
-  
-  .filter-dropdown {
-    order: 2;
+
+  .search-input {
+    font-size: 16px; /* Prevent zoom on iOS */
   }
-  
-  .add-member-btn {
-    order: 3;
-  }
-  
-  .member-avatars {
-    order: 4;
-  }
-  
-  .member-avatar {
-    width: 28px;
-    height: 28px;
-  }
-  
-  .member-count {
-    width: 28px;
-    height: 28px;
-    font-size: 10px;
+
+  .add-dropdown-menu {
+    right: auto;
+    left: 0;
   }
 }
