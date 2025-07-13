@@ -2,7 +2,6 @@ package com.taskmanager.service;
 
 import com.taskmanager.dto.TaskCreateDto;
 import com.taskmanager.dto.TaskDto;
-import com.taskmanager.model.Category;
 import com.taskmanager.model.Task;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class TaskMapper {
 
     @Autowired
-    private CategoryResolver categoryResolver;
+    //private CategoryResolver categoryResolver;
 
     // Entity -> DTO
     @Mapping(source = "category.id", target = "categoryId")
