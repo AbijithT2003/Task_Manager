@@ -27,35 +27,6 @@ class TaskService {
     }
   }
 
-  // Project Endpoints
-  async getProjects() {
-    return this.request('/projects');
-  }
-
-  async getProject(id) {
-    return this.request(`/projects/${id}`);
-  }
-
-  async createProject(projectData) {
-    return this.request('/projects', {
-      method: 'POST',
-      body: JSON.stringify(projectData),
-    });
-  }
-
-  async updateProject(id, projectData) {
-    return this.request(`/projects/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(projectData),
-    });
-  }
-
-  async deleteProject(id) {
-    return this.request(`/projects/${id}`, {
-      method: 'DELETE',
-    });
-  }
-
   // Task Endpoints
   async getTasks(projectId) {
     return this.request(`/projects/${projectId}/tasks`);
@@ -117,6 +88,35 @@ class TaskService {
     if (projectId) params.append('projectId', projectId);
     return this.request(`/search/tasks?${params}`);
   }
+
+  async getAllTasks() {
+  return this.request('/tasks'); 
+  }
+  // Category endpoints
+  async getCategories() {
+  return this.request('/categories');
+  }
+  async createCategory(categoryData) {
+  return this.request('/categories', {
+    method: 'POST',
+    body: JSON.stringify(categoryData),
+  });
+  }
+  async updateCategory(id, categoryData) {
+    return this.request(`/categories/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(categoryData),
+    });
+  }
+  async deleteCategory(id) {
+  return this.request(`/categories/${id}`, {
+    method: 'DELETE',
+  });
+  }
+
+
+
+   
 }
 
 export const taskService = new TaskService();

@@ -132,6 +132,18 @@
   color: #6b7280;
 }
 
+.category-badge {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 3px 8px;
+  font-size: 11px;
+  border-radius: 12px;
+  background-color: #f0f0f0;
+  color: #333;
+  text-transform: capitalize;
+}
+
+
 /* Task Footer */
 .task-footer {
   display: flex;

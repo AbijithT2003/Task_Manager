@@ -9,6 +9,9 @@ const Header = ({
   onFilterChange,
   viewMode,
   onViewModeChange,
+  categories,
+  selectedCategory,
+  onCategoryFilter,
   onAddTask
 }) => {
   const [showAddDropdown, setShowAddDropdown] = useState(false);
@@ -63,6 +66,22 @@ const Header = ({
             {filterOptions.map(option => (
               <option key={option.value} value={option.value}>
                 {option.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="dropdown-icon" size={16} />
+        </div>
+        {/* Category Filter Dropdown */}
+        <div className="filter-dropdown">
+          <select
+            value={selectedCategory}
+            onChange={(e) => onCategoryFilter(e.target.value)}
+            className="filter-select"
+          >
+            <option value="">All Categories</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
               </option>
             ))}
           </select>

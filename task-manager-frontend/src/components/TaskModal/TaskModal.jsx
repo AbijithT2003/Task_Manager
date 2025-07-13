@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { X, Calendar, Flag, MessageCircle, Paperclip, Trash2 } from 'lucide-react';
 import './TaskModal.css';
 
-const TaskModal = ({ task, onSave, onDelete, onClose }) => {
+const TaskModal = ({ task,categories, onSave, onDelete, onClose }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -20,6 +20,7 @@ const TaskModal = ({ task, onSave, onDelete, onClose }) => {
         description: task.description || '',
         status: task.status || 'TODO',
         priority: task.priority || 'MEDIUM',
+        categoryId: task?.categoryId || '',
         dueDate: task.dueDate ? new Date(task.dueDate).toISOString().slice(0, 16) : '',
         tags: task.tags || []
       });
@@ -27,13 +28,23 @@ const TaskModal = ({ task, onSave, onDelete, onClose }) => {
   }, [task]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const taskData = {
-      ...formData,
-      dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null
-    };
-    onSave(taskData);
-  };
+  e.preventDefault();
+  const taskData = {
+  ...formData,
+  dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : null,
+  ...(task?.id && { id: task.id })  // ✅ Add ID if editing
+};
+onSave(taskData);
+  // Prepare task data for saving
+
+  // If task exists (edit mode), include its ID
+  if (task?.id) {
+    taskData.id = task.id;
+  }
+
+  onSave(taskData);
+};
+
 
   const handleChange = (field, value) => {
     setFormData(prev => ({
@@ -53,6 +64,7 @@ const TaskModal = ({ task, onSave, onDelete, onClose }) => {
     { value: 'MEDIUM', label: 'Medium' },
     { value: 'HIGH', label: 'High' }
   ];
+  
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -122,6 +134,24 @@ const TaskModal = ({ task, onSave, onDelete, onClose }) => {
               </select>
             </div>
           </div>
+          <div className="form-group">
+            <label htmlFor="category">Category</label>
+            <select
+              id="category"
+              value={formData.categoryId || ''}
+              onChange={(e) => handleChange('categoryId', e.target.value)}
+              className="form-select"
+            >
+              <option value="">-- Select Category --</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+
 
           {/* Due Date */}
           <div className="form-group">

@@ -12,7 +12,7 @@ const TaskCard = ({ task, onClick, onDragStart }) => {
       default: return 'gray';
     }
   };
-
+ 
   const formatDueDate = (dueDate) => {
     if (!dueDate) return null;
     
@@ -66,6 +66,13 @@ const TaskCard = ({ task, onClick, onDragStart }) => {
           {task.priority}
         </div>
       )}
+      {/* Category Badge */}
+      {task.categoryName && (
+        <div className="category-badge" data-category={task.categoryName.toLowerCase()}>
+          {task.categoryName}
+        </div>
+      )}
+
 
       {/* Task Footer */}
       <div className="task-footer">
