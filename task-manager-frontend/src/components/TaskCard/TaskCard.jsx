@@ -1,9 +1,9 @@
 // frontend/src/components/TaskCard.js
 import React from 'react';
-import { MessageCircle, Paperclip, CheckSquare, Clock ,Trash2 } from 'lucide-react';
+import { MessageCircle, Paperclip, CheckSquare, Clock ,Trash2, Play, CheckCircle, RotateCcw } from 'lucide-react';
 import './TaskCard.css';
 
-const TaskCard = ({ task, onClick, onDragStart,onDelete  }) => {
+const TaskCard = ({ task, onClick, onDragStart,onDelete,onStatusChange   }) => {
   const getPriorityColor = (priority) => {
     switch (priority?.toLowerCase()) {
       case 'high': return 'red';
@@ -25,23 +25,39 @@ const TaskCard = ({ task, onClick, onDragStart,onDelete  }) => {
     
     const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',hour12: false });
     
-    if (isToday) {
-    return { text: `Today ${timeString}`, urgent: true };
-  } else if (isOverdue) {
-    const daysDiff = Math.ceil((nowOnly - dateOnly) / (1000 * 60 * 60 * 24));
-    return { text: `${daysDiff} day${daysDiff > 1 ? 's' : ''} overdue`, urgent: true };
-  } else {
-    const dateString = date.toLocaleDateString([], {
-      month: 'short',
-      day: 'numeric',
-      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
-    });
-    return { text: `${dateString} ${timeString}`, urgent: false };
+      if (isToday) {
+      return { text: `Today ${timeString}`, urgent: true };
+    } else if (isOverdue) {
+      const daysDiff = Math.ceil((nowOnly - dateOnly) / (1000 * 60 * 60 * 24));
+      return { text: `${daysDiff} day${daysDiff > 1 ? 's' : ''} overdue`, urgent: true };
+    } else {
+      const dateString = date.toLocaleDateString([], {
+        month: 'short',
+        day: 'numeric',
+        year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+      });
+      return { text: `${dateString} ${timeString}`, urgent: false };
+    }
   }
+  const getNextStatus = (currentStatus) => {
+  const statusFlow = {
+    'TODO': 'IN_PROGRESS',
+    'IN_PROGRESS': 'COMPLETED',
+    'COMPLETED': 'TODO'
+  };
+  return statusFlow[currentStatus];
 };
 
+const getStatusIcon = (status) => {
+  const icons = {
+    'TODO': Play,
+    'IN_PROGRESS': CheckCircle,
+    'COMPLETED': RotateCcw
+  };
+  return icons[status];
+};
   const dueDateInfo = formatDueDate(task.dueDate);
-
+  const StatusIcon = getStatusIcon(task.status);
   return (
     <div 
       className={`task-card ${task.completed ? 'completed' : ''}`}
@@ -115,6 +131,18 @@ const TaskCard = ({ task, onClick, onDragStart,onDelete  }) => {
             </div>
           )}
         </div>
+        <div className="task-actions">
+    <button 
+      className="quick-status-btn"
+      onClick={(e) => {
+        e.stopPropagation(); // prevent modal open
+        onStatusChange(task.id, getNextStatus(task.status));
+      }}
+      title={`Move to ${getNextStatus(task.status)}`}
+    >
+      <StatusIcon size={16} />
+    </button>
+  </div>
       </div>
     </div>
   );

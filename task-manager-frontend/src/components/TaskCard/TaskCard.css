@@ -167,6 +167,22 @@
   text-transform: capitalize;
 }
 
+.task-actions {
+  margin-left: auto;
+}
+
+.quick-status-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.quick-status-btn:hover {
+  color: #222;
+  transform: scale(1.1);
+}
 
 /* Task Footer */
 .task-footer {
