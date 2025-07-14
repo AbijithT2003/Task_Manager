@@ -63,6 +63,30 @@
   flex-shrink: 0;
 }
 
+/* Delete button */
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  padding: 2px;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.delete-btn:hover {
+  color: #e74c3c; /* red hover */
+}
+
+/* Optional: position delete icon in top right corner */
+.task-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 /* Task Description */
 .task-description {
   font-size: 13px;
