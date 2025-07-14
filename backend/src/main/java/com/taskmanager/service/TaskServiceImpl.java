@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import com.taskmanager.dto.TaskCreateDto;
 import com.taskmanager.dto.TaskDto;
 import com.taskmanager.exception.ResourceNotFoundException;
+import com.taskmanager.mapper.TaskMapper;
 import com.taskmanager.model.Task;
 import com.taskmanager.model.Task.TaskPriority;
 import com.taskmanager.model.Task.TaskStatus;
 import com.taskmanager.repository.TaskRepository;
-//import com.taskmanager.service.TaskService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,38 +21,38 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class TaskServiceImpl implements TaskService {
+
     private final TaskRepository taskRepository;
+    private final TaskMapper taskMapper; // ✅ corrected casing
+    private final CategoryResolver categoryResolver;
 
     @Override
     public TaskDto createTask(TaskCreateDto createDto) {
-        Task task = mapToEntity(createDto);
+        Task task = taskMapper.toEntity(createDto, categoryResolver); // assuming method updated
+        task.setCreatedAt(LocalDateTime.now());
+        task.setUpdatedAt(LocalDateTime.now());
         Task saved = taskRepository.save(task);
-        log.info("Created task with ID: {}", saved.getId());
-        return mapToDto(saved);
+        return taskMapper.toDTO(saved);
     }
 
     @Override
     public TaskDto getTaskById(Long id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with ID: " + id));
-        return mapToDto(task);
+        return taskMapper.toDTO(task);
     }
 
     @Override
     public TaskDto updateTask(Long id, TaskCreateDto updateDto) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task not found with ID: " + id));
-        
-        task.setTitle(updateDto.getTitle());
-        task.setDescription(updateDto.getDescription());
-        task.setStatus(updateDto.getStatus());
-        task.setPriority(updateDto.getPriority());
-        task.setDueDate(updateDto.getDueDate());
+
+        taskMapper.updateEntity(task, updateDto, categoryResolver); // assuming method updated
         task.setUpdatedAt(LocalDateTime.now());
-        
+
         Task updated = taskRepository.save(task);
         log.info("Updated task with ID: {}", updated.getId());
-        return mapToDto(updated);
+        return taskMapper.toDTO(updated);
     }
 
     @Override
@@ -67,54 +67,28 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<TaskDto> getAllTasks() {
         return taskRepository.findAll().stream()
-                .map(this::mapToDto)
+                .map(taskMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDto> getTasksByStatus(TaskStatus status) {
         return taskRepository.findByStatus(status).stream()
-                .map(this::mapToDto)
+                .map(taskMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDto> getTasksByPriority(TaskPriority priority) {
         return taskRepository.findByPriority(priority).stream()
-                .map(this::mapToDto)
+                .map(taskMapper::toDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<TaskDto> getOverdueTasks() {
         return taskRepository.findOverdueTasks(LocalDateTime.now(), TaskStatus.COMPLETED).stream()
-                .map(this::mapToDto)
+                .map(taskMapper::toDTO)
                 .collect(Collectors.toList());
-    }
-
-    // --- Mapping methods ---
-    private TaskDto mapToDto(Task task) {
-        return TaskDto.builder()
-                .id(task.getId())
-                .title(task.getTitle())
-                .description(task.getDescription())
-                .status(task.getStatus())
-                .priority(task.getPriority())
-                .dueDate(task.getDueDate())
-                .createdAt(task.getCreatedAt())
-                .updatedAt(task.getUpdatedAt())
-                .build();
-    }
-
-    private Task mapToEntity(TaskCreateDto Dto) {
-        return Task.builder()
-                .title(Dto.getTitle())
-                .description(Dto.getDescription())
-                .status(Dto.getStatus())
-                .priority(Dto.getPriority())
-                .dueDate(Dto.getDueDate())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
     }
 }

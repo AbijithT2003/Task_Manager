@@ -1,27 +1,24 @@
-package com.taskmanager.service;
+package com.taskmanager.mapper;
 
 import com.taskmanager.dto.TaskCreateDto;
 import com.taskmanager.dto.TaskDto;
 import com.taskmanager.model.Task;
+import com.taskmanager.service.CategoryResolver;
 import org.mapstruct.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public abstract class TaskMapper {
-
-    @Autowired
-    //private CategoryResolver categoryResolver;
+public interface TaskMapper {
 
     // Entity -> DTO
     @Mapping(source = "category.id", target = "categoryId")
     @Mapping(source = "category.name", target = "categoryName")
-    public abstract TaskDto toDTO(Task task);
+    TaskDto toDTO(Task task);
 
-    // Create DTO -> Entity
+    // Create DTO -> Entity (use @Context to inject resolver)
     @Mapping(target = "category", expression = "java(categoryResolver.fromId(dto.getCategoryId()))")
-    public abstract Task toEntity(TaskCreateDto dto);
+    Task toEntity(TaskCreateDto dto, @Context CategoryResolver categoryResolver);
 
-    // Update existing entity
+    // Update Entity
     @Mapping(target = "category", expression = "java(categoryResolver.fromId(dto.getCategoryId()))")
-    public abstract void updateEntity(@MappingTarget Task task, TaskCreateDto dto);
+    void updateEntity(@MappingTarget Task task, TaskCreateDto dto, @Context CategoryResolver categoryResolver);
 }
