@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+//import React, { useState } from 'react';
 import { Search, Grid, List, Plus, ChevronDown } from 'lucide-react';
 import './Header.css';
 
 const Header = ({
   searchTerm,
   onSearchChange,
-  filterStatus,
-  onFilterChange,
   viewMode,
   onViewModeChange,
   categories,
@@ -14,14 +12,7 @@ const Header = ({
   onCategoryFilter,
   onAddTask
 }) => {
-  const [showAddDropdown, setShowAddDropdown] = useState(false);
 
-  const filterOptions = [
-    { value: 'all', label: 'All tasks' },
-    { value: 'todo', label: 'To Do' },
-    { value: 'in_progress', label: 'In Progress' },
-    { value: 'completed', label: 'Completed' }
-  ];
 
   return (
     <header className="header">
@@ -56,21 +47,6 @@ const Header = ({
           </button>
         </div>
 
-        {/* Filter Dropdown */}
-        <div className="filter-dropdown">
-          <select
-            value={filterStatus}
-            onChange={(e) => onFilterChange(e.target.value)}
-            className="filter-select"
-          >
-            {filterOptions.map(option => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          <ChevronDown className="dropdown-icon" size={16} />
-        </div>
         {/* Category Filter Dropdown */}
         <div className="filter-dropdown">
           <select
@@ -92,19 +68,11 @@ const Header = ({
         <div className="add-dropdown">
           <button 
             className="add-btn" 
-            onClick={() => setShowAddDropdown(!showAddDropdown)}
+            onClick={onAddTask}
           >
             <Plus size={16} />
-            <span>Add</span>
-            <ChevronDown size={14} />
+            <span>Add Task</span>
           </button>
-          {showAddDropdown && (
-            <div className="add-dropdown-menu">
-              <button onClick={() => { onAddTask(); setShowAddDropdown(false); }}>
-                Add Task
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </header>

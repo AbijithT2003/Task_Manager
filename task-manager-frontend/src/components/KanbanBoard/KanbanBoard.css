@@ -9,7 +9,7 @@
 }
 
 .kanban-column {
-  background-color: #f8fafc;
+  background-color: #ffffff;
   border-radius: 12px;
   padding: 16px;
   min-height: 400px;
@@ -39,11 +39,11 @@
 }
 
 .kanban-column.yellow {
-  border-top: 4px solid #f59e0b;
+  border-top: 4px solid #f50be2;
 }
 
 .kanban-column.yellow .column-title h3 {
-  color: #f59e0b;
+  color: #f50be2;
 }
 
 .kanban-column.red {
@@ -53,6 +53,14 @@
 .kanban-column.red .column-title h3 {
   color: #ef4444;
 }
+.kanban-column.green {
+  border-top: 4px solid #10b981; /* emerald green */
+}
+
+.kanban-column.green .column-title h3 {
+  color: #10b981;
+}
+
 
 /* Column Header */
 .column-header {

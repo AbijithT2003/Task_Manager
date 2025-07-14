@@ -1,9 +1,9 @@
 // frontend/src/components/TaskCard.js
 import React from 'react';
-import { MessageCircle, Paperclip, CheckSquare, Clock } from 'lucide-react';
+import { MessageCircle, Paperclip, CheckSquare, Clock ,Trash2 } from 'lucide-react';
 import './TaskCard.css';
 
-const TaskCard = ({ task, onClick, onDragStart }) => {
+const TaskCard = ({ task, onClick, onDragStart,onDelete  }) => {
   const getPriorityColor = (priority) => {
     switch (priority?.toLowerCase()) {
       case 'high': return 'red';
@@ -45,7 +45,13 @@ const TaskCard = ({ task, onClick, onDragStart }) => {
       <div className="task-title">
         <h4>{task.title}</h4>
         {task.completed && <CheckSquare className="completed-icon" size={16} />}
-      </div>
+        <button className="delete-btn" onClick={(e) => {
+          e.stopPropagation(); // prevent modal trigger
+          onDelete(task.id);
+        }}>
+          <Trash2 size={14} />
+        </button>
+        </div>
 
       {/* Task Description */}
       {task.description && (

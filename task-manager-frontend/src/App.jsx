@@ -9,7 +9,6 @@ import './App.css';
 function App() {
   const [tasks, setTasks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
   const [viewMode, setViewMode] = useState('kanban');
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
@@ -107,29 +106,29 @@ function App() {
   const handleAddTask = () => {
     openTaskModal();
   };
+  const handleDeleteTask = async (taskId) => {
+    await taskService.deleteTask(taskId);
+    setTasks(prev => prev.filter(t => t.id !== taskId));
+  };
 
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
       const matchesSearch =
         task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFilter =
-        filterStatus === 'all' || task.status === filterStatus;
-      const matchesStatus =
-        filterStatus === 'all' || task.status === filterStatus;
+
       const matchesCategory =
         selectedCategory === '' || task.categoryId === parseInt(selectedCategory);
-      return matchesSearch && matchesFilter && matchesStatus && matchesCategory;
+
+      return matchesSearch && matchesCategory;
     });
-  }, [tasks, searchTerm, filterStatus, selectedCategory]); //selectedCategory
+  }, [tasks, searchTerm, selectedCategory]);
 
   return (
     <div className="app">
       <Header
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
-        filterStatus={filterStatus}
-        onFilterChange={setFilterStatus}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         onAddTask={handleAddTask}
@@ -149,6 +148,7 @@ function App() {
             onCreateTask={openTaskModal}
             categories={categories}
             onCategoryCreate={handleCategoryCreate}
+            onDeleteTask={handleDeleteTask}
           />
         )}
       </main>
