@@ -2,6 +2,7 @@
 
 import com.taskmanager.dto.TaskCreateDto;
 import com.taskmanager.dto.TaskDto;
+import com.taskmanager.dto.TaskStatusUpdateDto;
 import com.taskmanager.model.Task.TaskPriority;
 import com.taskmanager.model.Task.TaskStatus;
 import com.taskmanager.service.TaskService;
@@ -122,5 +123,14 @@ public class TaskController {
         List<TaskDto> tasks = taskService.getOverdueTasks();
         return ResponseEntity.ok(tasks);
     }
+    @PatchMapping("/api/tasks/{id}/status")
+    public ResponseEntity<?> updateTaskStatus(
+            @PathVariable Long id,
+            @RequestBody TaskStatusUpdateDto statusUpdateDTO
+    ) {
+        taskService.updateTaskStatus(id, statusUpdateDTO.getStatus());
+        return ResponseEntity.noContent().build();
+    }
+
     // --- Additional methods can be added here as needed ---{    
 }

@@ -50,6 +50,10 @@ public interface TaskService {
      */
     List<TaskDto> getTasksByStatus(TaskStatus status);
     
+
+    void updateTaskStatus(Long id, String status);
+    
+
     /**
      * Retrieves tasks by priority
      * @param priority Task priority

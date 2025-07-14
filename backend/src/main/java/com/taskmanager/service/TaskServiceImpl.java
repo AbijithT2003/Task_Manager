@@ -91,4 +91,14 @@ public class TaskServiceImpl implements TaskService {
                 .map(taskMapper::toDTO)
                 .collect(Collectors.toList());
     }
+    @Override
+    public void updateTaskStatus(Long id, String status) {
+        Task task = taskRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+
+        task.setStatus(TaskStatus.valueOf(status.toUpperCase())); // Assuming Enum
+        task.setUpdatedAt(LocalDateTime.now());
+        taskRepository.save(task);
+    }
+
 }
