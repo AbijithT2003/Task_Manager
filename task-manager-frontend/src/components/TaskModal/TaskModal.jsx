@@ -185,7 +185,10 @@ onClose();
                 <button
                   type="button"
                   className="delete-btn"
-                  onClick={onDelete}
+                  onClick={() => {
+                    onDelete(task.id);   
+                    onClose();          
+                  }}
                 >
                   <Trash2 size={16} />
                   Delete Task

@@ -57,6 +57,7 @@ const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, onDeleteTas
               <button 
                 className="add-task-btn"
                 onClick={() => onCreateTask({ status: column.status })}
+                title="Add Task"
               >
                 <Plus size={16} />
               </button>

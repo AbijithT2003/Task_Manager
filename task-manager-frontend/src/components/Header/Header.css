@@ -50,8 +50,12 @@
   border-radius: 8px;
   font-size: 14px;
   background-color: #f9fafb;
+  color: #111827;
   transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
 }
+
 
 .search-input:focus {
   outline: none;

@@ -52,7 +52,14 @@ function App() {
   }
   };
   const handleStatusChange = async (taskId, newStatus) => {
-  await handleTaskUpdate(taskId, { status: newStatus });
+  try {
+    await taskService.updateTaskStatus(taskId, newStatus);
+    const { data } = await taskService.getAllTasks(); // Refresh tasks
+    setTasks(data); // Update your local state
+    loadTasks(); // Reload tasks to ensure UI is updated
+  } catch (err) {
+    console.error('Failed to update status', err);
+  }
 };
 
 

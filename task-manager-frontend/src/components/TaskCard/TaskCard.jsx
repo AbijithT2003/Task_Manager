@@ -39,13 +39,13 @@ const TaskCard = ({ task, onClick, onDragStart,onDelete,onStatusChange   }) => {
       return { text: `${dateString} ${timeString}`, urgent: false };
     }
   }
-  const getNextStatus = (currentStatus) => {
+const getNextStatus = (currentStatus) => {
   const statusFlow = {
     'TODO': 'IN_PROGRESS',
     'IN_PROGRESS': 'COMPLETED',
     'COMPLETED': 'TODO'
   };
-  return statusFlow[currentStatus];
+  return statusFlow[currentStatus] || 'TODO';
 };
 
 const getStatusIcon = (status) => {
@@ -137,6 +137,8 @@ const getStatusIcon = (status) => {
       onClick={(e) => {
         e.stopPropagation(); // prevent modal open
         onStatusChange(task.id, getNextStatus(task.status));
+        console.log("Changing task", task, "to status:", StatusIcon.name);
+
       }}
       title={`Move to ${getNextStatus(task.status)}`}
     >
