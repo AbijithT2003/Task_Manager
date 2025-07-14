@@ -1,6 +1,6 @@
 // frontend/src/components/KanbanBoard.js
 import React from 'react';
-import { Plus } from 'lucide-react';
+import { Plus,Trash2  } from 'lucide-react';
 import TaskCard from "../TaskCard/TaskCard.jsx";
 import './KanbanBoard.css';
 

@@ -5,8 +5,6 @@ import './Header.css';
 const Header = ({
   searchTerm,
   onSearchChange,
-  viewMode,
-  onViewModeChange,
   categories,
   selectedCategory,
   onCategoryFilter,
@@ -31,21 +29,7 @@ const Header = ({
       </div>
 
       <div className="header-right">
-        {/* View Toggle */}
-        <div className="view-toggle">
-          <button
-            className={`view-btn ${viewMode === 'kanban' ? 'active' : ''}`}
-            onClick={() => onViewModeChange('kanban')}
-          >
-            <Grid size={16} />
-          </button>
-          <button
-            className={`view-btn ${viewMode === 'list' ? 'active' : ''}`}
-            onClick={() => onViewModeChange('list')}
-          >
-            <List size={16} />
-          </button>
-        </div>
+        
 
         {/* Category Filter Dropdown */}
         <div className="filter-dropdown">

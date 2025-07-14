@@ -58,6 +58,7 @@ function App() {
 
 
   const handleTaskCreate = async (taskData) => {
+    if (!taskData?.title) return;
     try {
       const response = await taskService.createTask(taskData);
       setTasks((prevTasks) => [...prevTasks, response.data]);

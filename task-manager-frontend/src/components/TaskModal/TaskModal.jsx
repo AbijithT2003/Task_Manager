@@ -35,15 +35,8 @@ const TaskModal = ({ task,categories, onSave, onDelete, onClose }) => {
   ...(task?.id && { id: task.id })  // ✅ Add ID if editing
 };
 onSave(taskData);
-  // Prepare task data for saving
-
-  // If task exists (edit mode), include its ID
-  if (task?.id) {
-    taskData.id = task.id;
-  }
-
-  onSave(taskData);
-};
+onClose(); 
+  };
 
 
   const handleChange = (field, value) => {
