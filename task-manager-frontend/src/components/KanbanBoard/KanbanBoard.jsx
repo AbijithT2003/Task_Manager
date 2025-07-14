@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react';
 import TaskCard from "../TaskCard/TaskCard.jsx";
 import './KanbanBoard.css';
 
-const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, onDeleteTask, members }) => {
+const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, onDeleteTask, onStatusChange }) => {
   const columns = [
   { id: 'todo', title: 'To Do', status: 'TODO', color: 'purple' },
   { id: 'in_progress', title: 'In Progress', status: 'IN_PROGRESS', color: 'blue' },
@@ -67,10 +67,10 @@ const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, onDeleteTas
                 <TaskCard
                   key={task.id}
                   task={task}
-                  members={members}
                   onClick={() => onTaskClick(task)}
                   onDragStart={(e) => handleDragStart(e, task)}
                   onDelete={onDeleteTask}
+                  onStatusChange={onStatusChange}
                 />
               ))}
               

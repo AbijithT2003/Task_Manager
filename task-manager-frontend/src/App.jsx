@@ -51,6 +51,10 @@ function App() {
     console.error('Error creating category:', error);
   }
   };
+  const handleStatusChange = async (taskId, newStatus) => {
+  await handleTaskUpdate(taskId, { status: newStatus });
+};
+
 
 
   const handleTaskCreate = async (taskData) => {
@@ -149,6 +153,7 @@ function App() {
             categories={categories}
             onCategoryCreate={handleCategoryCreate}
             onDeleteTask={handleDeleteTask}
+            onStatusChange={handleStatusChange}
           />
         )}
       </main>
