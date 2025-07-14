@@ -7,75 +7,60 @@ import { taskService } from './services/taskService';
 import './App.css';
 
 function App() {
-  const [projects, setProjects] = useState([]);
-  const [currentProject, setCurrentProject] = useState(null);
   const [tasks, setTasks] = useState([]);
-  const [members, setMembers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState('all');
   const [viewMode, setViewMode] = useState('kanban');
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+
+
 
   useEffect(() => {
-    loadProjects();
-    loadMembers();
+    loadTasks();
+    loadCategories();
   }, []);
 
-  const loadProjects = async () => {
-    try {
-      const response = await taskService.getProjects();
-      const sortedProjects = response.data.sort((a, b) =>
-        a.name.localeCompare(b.name)
-      );
-      setProjects(sortedProjects);
-      if (sortedProjects.length > 0) {
-        setCurrentProject(sortedProjects[0]);
-      }
-    } catch (error) {
-      console.error('Error loading projects:', error);
-    }
-  };
-
   const loadTasks = useCallback(async () => {
-    if (!currentProject?.id) return;
     try {
       setLoading(true);
-      const response = await taskService.getTasks(currentProject.id);
+      const response = await taskService.getAllTasks();
       setTasks(response.data);
     } catch (error) {
       console.error('Error loading tasks:', error);
     } finally {
       setLoading(false);
     }
-  }, [currentProject]);
+  }, []);
 
-  useEffect(() => {
-    if (currentProject) {
-      loadTasks();
-    }
-  }, [currentProject, loadTasks]);
-
-  const loadMembers = async () => {
-    try {
-      const response = await taskService.getMembers();
-      setMembers(response.data);
-    } catch (error) {
-      console.error('Error loading members:', error);
-    }
+  const loadCategories = async () => {
+  try {
+    const response = await taskService.getCategories();
+    setCategories(response.data);
+  } catch (error) {
+    console.error('Error loading categories:', error);
+  }
   };
-
-  const handleProjectChange = (project) => {
-    setCurrentProject(project);
+  const handleCategoryCreate = async (categoryData) => {
+  try {
+    const response = await taskService.createCategory(categoryData);
+    setCategories(prevCategories => [...prevCategories, response.data]);
+  } catch (error) {
+    console.error('Error creating category:', error);
+  }
   };
+  const handleStatusChange = async (taskId, newStatus) => {
+  await handleTaskUpdate(taskId, { status: newStatus });
+};
+
+
 
   const handleTaskCreate = async (taskData) => {
+    if (!taskData?.title) return;
     try {
-      const response = await taskService.createTask({
-        ...taskData,
-        projectId: currentProject.id,
-      });
+      const response = await taskService.createTask(taskData);
       setTasks((prevTasks) => [...prevTasks, response.data]);
       setIsTaskModalOpen(false);
     } catch (error) {
@@ -126,33 +111,35 @@ function App() {
   const handleAddTask = () => {
     openTaskModal();
   };
+  const handleDeleteTask = async (taskId) => {
+    await taskService.deleteTask(taskId);
+    setTasks(prev => prev.filter(t => t.id !== taskId));
+  };
 
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
       const matchesSearch =
         task.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         task.description?.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFilter =
-        filterStatus === 'all' || task.status === filterStatus;
-      return matchesSearch && matchesFilter;
+
+      const matchesCategory =
+        selectedCategory === '' || task.categoryId === parseInt(selectedCategory);
+
+      return matchesSearch && matchesCategory;
     });
-  }, [tasks, searchTerm, filterStatus]);
+  }, [tasks, searchTerm, selectedCategory]);
 
   return (
     <div className="app">
       <Header
-        projects={projects}
-        currentProject={currentProject}
-        onProjectChange={handleProjectChange}
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
-        filterStatus={filterStatus}
-        onFilterChange={setFilterStatus}
         viewMode={viewMode}
         onViewModeChange={setViewMode}
-        members={members}
         onAddTask={handleAddTask}
-        // ⛔ Removed: onAddProject
+        categories={categories} 
+        selectedCategory={selectedCategory} 
+        onCategoryFilter={setSelectedCategory} 
       />
 
       <main className="main-content">
@@ -164,7 +151,10 @@ function App() {
             onTaskClick={openTaskModal}
             onTaskMove={handleTaskMove}
             onCreateTask={openTaskModal}
-            members={members}
+            categories={categories}
+            onCategoryCreate={handleCategoryCreate}
+            onDeleteTask={handleDeleteTask}
+            onStatusChange={handleStatusChange}
           />
         )}
       </main>
@@ -172,7 +162,7 @@ function App() {
       {isTaskModalOpen && (
         <TaskModal
           task={selectedTask}
-          members={members}
+          categories={categories}
           onSave={
             selectedTask
               ? (updates) => handleTaskUpdate(selectedTask.id, updates)

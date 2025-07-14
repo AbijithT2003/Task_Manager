@@ -1,10 +1,10 @@
 // frontend/src/components/KanbanBoard.js
 import React from 'react';
-import { Plus } from 'lucide-react';
+import { Plus,Trash2  } from 'lucide-react';
 import TaskCard from "../TaskCard/TaskCard.jsx";
 import './KanbanBoard.css';
 
-const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, members }) => {
+const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, onDeleteTask, onStatusChange }) => {
   const columns = [
   { id: 'todo', title: 'To Do', status: 'TODO', color: 'purple' },
   { id: 'in_progress', title: 'In Progress', status: 'IN_PROGRESS', color: 'blue' },
@@ -36,7 +36,12 @@ const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, members }) 
     <div className="kanban-board">
       {columns.map(column => {
         const columnTasks = getTasksForColumn(column.status);
-        
+        const handleClearCompleted = async () => {
+        const completedTasks = columnTasks.filter(task => task.status === 'COMPLETED');
+        for (const task of completedTasks) {
+          await onDeleteTask(task.id);
+        }
+      };
         return (
           <div 
             key={column.id} 
@@ -62,19 +67,31 @@ const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, members }) 
                 <TaskCard
                   key={task.id}
                   task={task}
-                  members={members}
                   onClick={() => onTaskClick(task)}
                   onDragStart={(e) => handleDragStart(e, task)}
+                  onDelete={onDeleteTask}
+                  onStatusChange={onStatusChange}
                 />
               ))}
               
-              <button 
-                className="add-new-task-btn"
-                onClick={() => onCreateTask({ status: column.status })}
-              >
-                <Plus size={16} />
-                Add new task
-              </button>
+              {column.id === 'completed' ? (
+                <button 
+                  className="clear-completed-btn"
+                  onClick={handleClearCompleted}
+                  disabled={columnTasks.length === 0}
+                >
+                  <Trash2 size={16} />
+                  Clear Completed ({columnTasks.length})
+                </button>
+              ) : (
+                <button 
+                  className="add-new-task-btn"
+                  onClick={() => onCreateTask({ status: column.status })}
+                >
+                  <Plus size={16} />
+                  Add new task
+                </button>
+               )} 
             </div>
           </div>
         );

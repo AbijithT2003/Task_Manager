@@ -17,6 +17,8 @@ public class TaskDto {
     private Long id;
     private String title;
     private String description;
+    private Long categoryId;
+    private String categoryName;
     private TaskStatus status;
     private TaskPriority priority;
     private LocalDateTime dueDate;
