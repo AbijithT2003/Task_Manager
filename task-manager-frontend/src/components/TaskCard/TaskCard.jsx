@@ -18,19 +18,27 @@ const TaskCard = ({ task, onClick, onDragStart,onDelete  }) => {
     
     const date = new Date(dueDate);
     const now = new Date();
-    const isToday = date.toDateString() === now.toDateString();
-    const isOverdue = date < now && !isToday;
+    const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const nowOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const isToday = dateOnly.getTime() === nowOnly.getTime();
+    const isOverdue = dateOnly < nowOnly;
     
-    const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit',hour12: false });
     
     if (isToday) {
-      return { text: `Today ${timeString}`, urgent: true };
-    } else if (isOverdue) {
-      return { text: `Overdue ${timeString}`, urgent: true };
-    } else {
-      return { text: date.toLocaleDateString() + ' ' + timeString, urgent: false };
-    }
-  };
+    return { text: `Today ${timeString}`, urgent: true };
+  } else if (isOverdue) {
+    const daysDiff = Math.ceil((nowOnly - dateOnly) / (1000 * 60 * 60 * 24));
+    return { text: `${daysDiff} day${daysDiff > 1 ? 's' : ''} overdue`, urgent: true };
+  } else {
+    const dateString = date.toLocaleDateString([], {
+      month: 'short',
+      day: 'numeric',
+      year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+    });
+    return { text: `${dateString} ${timeString}`, urgent: false };
+  }
+};
 
   const dueDateInfo = formatDueDate(task.dueDate);
 

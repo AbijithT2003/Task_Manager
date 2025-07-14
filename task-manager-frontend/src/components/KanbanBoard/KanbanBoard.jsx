@@ -36,7 +36,12 @@ const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, onDeleteTas
     <div className="kanban-board">
       {columns.map(column => {
         const columnTasks = getTasksForColumn(column.status);
-        
+        const handleClearCompleted = async () => {
+        const completedTasks = columnTasks.filter(task => task.status === 'COMPLETED');
+        for (const task of completedTasks) {
+          await onDeleteTask(task.id);
+        }
+      };
         return (
           <div 
             key={column.id} 
@@ -69,13 +74,24 @@ const KanbanBoard = ({ tasks, onTaskClick, onTaskMove, onCreateTask, onDeleteTas
                 />
               ))}
               
-              <button 
-                className="add-new-task-btn"
-                onClick={() => onCreateTask({ status: column.status })}
-              >
-                <Plus size={16} />
-                Add new task
-              </button>
+              {column.id === 'completed' ? (
+                <button 
+                  className="clear-completed-btn"
+                  onClick={handleClearCompleted}
+                  disabled={columnTasks.length === 0}
+                >
+                  <Trash2 size={16} />
+                  Clear Completed ({columnTasks.length})
+                </button>
+              ) : (
+                <button 
+                  className="add-new-task-btn"
+                  onClick={() => onCreateTask({ status: column.status })}
+                >
+                  <Plus size={16} />
+                  Add new task
+                </button>
+               )} 
             </div>
           </div>
         );
